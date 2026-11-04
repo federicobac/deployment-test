@@ -1,0 +1,20 @@
+﻿name: deployment-test
+
+services:
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      PORT: "3000"
+    ports:
+      - "127.0.0.1:3500:3000"
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_HTTP_PORTS: "4000"
+    ports:
+      - "127.0.0.1:3501:4000"
