@@ -1,20 +1,50 @@
-﻿name: deployment-test
+﻿
+# Name of the Docker Compose project
+name: deployment-test
 
+# Define the containers/services that belong to this application
 services:
+
+  # FRONTEND SERVICE
   web:
+    # Build the frontend Docker image
     build:
+      # Directory containing the frontend source code
       context: ./client
+
+      # Dockerfile to use inside the client directory
       dockerfile: Dockerfile
+
+    # Environment variables passed into the frontend container
     environment:
+      # The frontend application listens on port 3000 inside the container
       PORT: "3000"
+
+    # Connect a port on our computer to a port inside the container
     ports:
+      # Host: 127.0.0.1:3500
+      # Container: port 3000
+      # The frontend is accessible at http://localhost:3500
       - "127.0.0.1:3500:3000"
 
+  # BACKEND SERVICE
   api:
+    # Build the backend Docker image
     build:
+      # Directory containing the backend solution/projects
       context: ./server
+
+      # Dockerfile to use inside the server directory
       dockerfile: Dockerfile
+
+    # Environment variables passed into the backend container
     environment:
+      # ASP.NET Core listens on port 4000 inside the container
       ASPNETCORE_HTTP_PORTS: "4000"
+
+    # Expose the backend to our computer
     ports:
-      - "127.0.0.1:3501:4000"
+      # Host: 127.0.0.1:4000
+      # Container: port 4000
+      # The API is accessible at http://localhost:4000
+      - "127.0.0.1:4000:4000"
