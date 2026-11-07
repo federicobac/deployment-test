@@ -1,23 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Allow the deployed frontend to communicate with this API.
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("Frontend", policy =>
-    {
-        policy.WithOrigins(
-                "https://deployment-test.fly.dev",
-                "http://localhost:3500"
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
-
 var app = builder.Build();
 
-// Enable the CORS policy.
-app.UseCors("Frontend");
+// Health-check endpoint for Nginx and deployment monitoring.
+app.MapGet("/healthz", () =>
+{
+    return Results.Ok(new { status = "Healthy" });
+});
 
 // Basic API endpoint.
 app.MapGet("/", () =>

@@ -564,3 +564,7 @@ server/.idea/.idea.server.dir/.idea/queries
 server/.idea/.idea.server.dir/.idea/dataSources
 server/.idea/.idea.server.dir/.idea/dataSources.local.xml
 fly.toml
+
+# Git metadata
+.git
+**/.git

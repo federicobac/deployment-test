@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import "./index.css";
 
@@ -13,7 +12,7 @@ export function App() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch("https://server-empty-waterfall-7376.fly.dev/")
+        fetch("/api/")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error: ${response.status}`);

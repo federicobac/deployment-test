@@ -1,0 +1,32 @@
+server {
+    listen 8080;
+    listen [::]:8080;
+
+    # Forward API requests to the .NET backend.
+    location /api/ {
+        proxy_pass http://${API_HOST}:4000/;
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Health-check endpoint.
+    location = /healthz {
+        return 200 "OK";
+        add_header Content-Type text/plain;
+    }
+
+    # Forward all other requests to the React frontend.
+    location / {
+        proxy_pass http://${WEB_HOST}:3000;
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
