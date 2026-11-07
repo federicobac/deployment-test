@@ -1,0 +1,32 @@
+name: deployment-test-proxy
+
+services:
+
+  # NGINX REVERSE PROXY
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      API_HOST: "127.0.0.1"
+      WEB_HOST: "127.0.0.1"
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - api
+      - web
+
+  # FRONTEND - PREBUILT DOCKER HUB IMAGE
+  web:
+    image: federicobac/deployment-test-web:latest
+    expose:
+      - "3000"
+
+  # BACKEND - PREBUILT DOCKER HUB IMAGE
+  api:
+    image: federicobac/deployment-test-api:latest
+    expose:
+      - "4000"
