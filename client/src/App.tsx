@@ -1,24 +1,53 @@
-import { APITester } from "./APITester";
+
+import { useEffect, useState } from "react";
 import "./index.css";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+type ApiResponse = {
+    message: string;
+    application: string;
+    status: string;
+};
 
 export function App() {
-  return (
-    <div className="app">
-      <div className="logo-container">
-        <img src={logo} alt="Bun Logo" className="logo bun-logo" />
-        <img src={reactLogo} alt="React Logo" className="logo react-logo" />
-      </div>
+    const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-        <h1>My application is deployed on Fly.io!</h1>
-        <p>
-            This version is running in production.
-        </p>
-      <APITester />
-    </div>
-  );
+    useEffect(() => {
+        fetch("https://server-empty-waterfall-7376.fly.dev/")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                return response.json();
+            })
+            .then((data: ApiResponse) => {
+                setApiResponse(data);
+            })
+            .catch((err: Error) => {
+                setError(err.message);
+            });
+    }, []);
+
+    return (
+        <div className="app">
+            <h1>My application is deployed on Fly.io!</h1>
+
+            <h2>.NET API Connection</h2>
+
+            {error && <p>Connection error: {error}</p>}
+
+            {!apiResponse && !error && <p>Loading API response...</p>}
+
+            {apiResponse && (
+                <div>
+                    <p><strong>Message:</strong> {apiResponse.message}</p>
+                    <p><strong>Application:</strong> {apiResponse.application}</p>
+                    <p><strong>Status:</strong> {apiResponse.status}</p>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default App;
